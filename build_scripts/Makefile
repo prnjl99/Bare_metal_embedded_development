@@ -1,10 +1,15 @@
 # Makefile to build target application from <ROOT>/test_applications
 
-CC=arm-none-eabi-gcc
+ifeq ($(CI),true)
+    CC:=gcc
+else
+    CC:=arm-none-eabi-gcc
+    CFLAGS=--specs=nosys.specs
+endif
 
 OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)
 
-CFLAGS=-Wall -Wextra -Werror --specs=nosys.specs
+CFLAGS+=-Wall -Wextra -Werror
 LFLAGS=
 
 INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp

@@ -1,0 +1,29 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+#    - name: Install dependencies
+#      run: |
+#       sudo apt update
+#       sudo apt install build-essential
+
+    - name: build_test_project
+      run: bash ./build_scripts/build.sh build first_app
+
+#    - name: Run check
+#      run: make check
+
+#    - name: Run distcheck
+#      run: make distcheck
