@@ -1,18 +1,36 @@
 # Makefile to build target application from <ROOT>/test_applications
 
-#CC = arm-none-eabi-gcc
+CC=arm-none-eabi-gcc
 
-#$(info APP=$(APP))
-#$(info ROOT_FOLDER=$(ROOT_FOLDER))
+OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)
 
-#CFLAGS = -g -Wall
-#LFLAGS = -L/home/newhall/lib  -L../lib
+CFLAGS=-Wall -Wextra -Werror --specs=nosys.specs
+LFLAGS=
 
-#INCLUDES = -I$(ROOT_FOLDER)/home/newhall/include -I$(ROOT_FOLDER)/include
-#SRCS=$(wildcard $(ROOT_FOLDER)/bsp/*.c)
-#SRCS+=$(wildcard $(ROOT_FOLDER)/driver/sources/*.c)
-#SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/app/*.c)
-#LDFILES=$(wildcard $(ROOT_FOLDER)/bsp/*.ld)
+INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp
+SRCS=$(wildcard $(ROOT_FOLDER)/bsp/*.c)
+SRCS+=$(wildcard $(ROOT_FOLDER)/driver/sources/*.c)
+SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/$(APP)/*.c)
+LDFILES=$(wildcard $(ROOT_FOLDER)/bsp/*.ld)
+OBJS= $(SRCS:.c=.o)
 
-#clean :
-#        ls
+MAIN=$(APP)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+.PHONY: depend clean
+
+all:	$(MAIN)
+		$(info ######################################################)
+		$(info $(APP) build successfully)
+		$(info ######################################################)
+
+$(MAIN):	$(OBJS) $(OBJDIR)
+		$(CC) $(CFLAGS) $(INCLUDES) -o $(OBJDIR)/$(MAIN) $(OBJS) $(LFLAGS)
+
+.c.o:
+		$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+
+depend: $(SRCS)
+		makedepend $(INCLUDES) $^
