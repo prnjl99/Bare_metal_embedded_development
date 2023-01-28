@@ -7,6 +7,8 @@ else
     CFLAGS=--specs=nosys.specs
 endif
 
+
+APP?=first_app
 OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)
 
 CFLAGS+=-Wall -Wextra -Werror
