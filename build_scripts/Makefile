@@ -21,17 +21,17 @@ OBJS= $(SRCS:.c=.o)
 
 MAIN=$(APP)
 
-$(OBJDIR):
+OBJFUNC:
 	mkdir -p $(OBJDIR)
 
 .PHONY: depend clean
 
-all:	$(MAIN)
+all:	MAINFUNC
 		$(info ######################################################)
 		$(info $(APP) build successfully)
 		$(info ######################################################)
 
-$(MAIN):	$(OBJS) $(OBJDIR)
+MAINFUNC:	$(OBJS) OBJFUNC
 		$(CC) $(CFLAGS) $(INCLUDES) -o $(OBJDIR)/$(MAIN) $(OBJS) $(LFLAGS)
 
 .c.o:
@@ -39,3 +39,5 @@ $(MAIN):	$(OBJS) $(OBJDIR)
 
 depend: $(SRCS)
 		makedepend $(INCLUDES) $^
+clean:
+		$(RM)-r $(OBJS) $(OBJDIR)
