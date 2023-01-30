@@ -4,12 +4,14 @@ ifeq ($(CI),true)
     CC:=gcc
 else
     CC:=arm-none-eabi-gcc
+    LD:=arm-none-eabi-ld
+    OBJCOPY:=arm-none-eabi-objcopy
     CFLAGS=--specs=nosys.specs
 endif
 
-
 APP?=first_app
-OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)
+APPDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)
+OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)/generated_files
 
 CFLAGS+=-Wall -Wextra -Werror
 LFLAGS=
@@ -19,27 +21,35 @@ SRCS=$(wildcard $(ROOT_FOLDER)/bsp/*.c)
 SRCS+=$(wildcard $(ROOT_FOLDER)/driver/sources/*.c)
 SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/$(APP)/*.c)
 LDFILES=$(wildcard $(ROOT_FOLDER)/bsp/*.ld)
-OBJS= $(SRCS:.c=.o)
+OBJS=$(SRCS:.c=.o)
 
-MAIN=$(APP)
-
-OBJFUNC:
+CREATE_DIRS:
 	mkdir -p $(OBJDIR)
+	mkdir -p $(APPDIR)
 
-.PHONY: depend clean
+MV_FILES_BUILD:
+	mv $(OBJS) $(OBJDIR)
 
-all:	MAINFUNC
+.PHONY: depend clean all
+
+all:	MAINFUNC GENBIN MV_FILES_BUILD
 		$(info ######################################################)
 		$(info $(APP) build successfully)
 		$(info ######################################################)
 
-MAINFUNC:	$(OBJS) OBJFUNC
-		$(CC) $(CFLAGS) $(INCLUDES) -o $(OBJDIR)/$(MAIN) $(OBJS) $(LFLAGS)
+MAINFUNC:$(OBJS) CREATE_DIRS
 
-.c.o:
-		$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+%.o:%.c
+		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+GENELF:
+	$(LD) -o $(APPDIR)/$(APP).elf $(OBJS) $(LFLAGS)
+
+GENBIN:GENELF
+	$(OBJCOPY) -O binary $(APPDIR)/$(APP).elf $(APPDIR)/$(APP).bin
 
 depend: $(SRCS)
 		makedepend $(INCLUDES) $^
+
 clean:
-		$(RM)-r $(OBJS) $(OBJDIR)
+		$(RM)-r $(OBJS) $(APPDIR)

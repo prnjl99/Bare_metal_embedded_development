@@ -1,8 +1,10 @@
 #include "first.h"
+//#include <stdio.h>
 
 void first_func(void)
 {
-	printf("first function for test");
+	//printf("first function for test");
+	while(1){};
 }
 void _close(void) 
 { }
