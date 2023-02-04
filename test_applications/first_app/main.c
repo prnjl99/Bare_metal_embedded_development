@@ -4,5 +4,5 @@
 int main(void)
 {
 	first_func();
-	(void)first;
+	while(1){};
 }
