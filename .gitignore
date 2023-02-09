@@ -51,5 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Project dev env
+.vscode/
+
 # test application builds
 test_applications/build/
