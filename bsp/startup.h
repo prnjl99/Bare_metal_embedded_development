@@ -1,4 +1,13 @@
-#define STANDARD_INTR_COUNT 16UL
-#define USER_INTR_COUNT     82UL
+#include <stdint.h>
 
-extern __attribute__((section(".vtors"))) void (*vectorTable[STANDARD_INTR_COUNT + USER_INTR_COUNT])(void);
+#define STACK_START 0x20018000U
+
+extern uint32_t _etext;
+extern uint32_t _sdata;
+extern uint32_t _edata;
+extern uint32_t _ebss;
+extern uint32_t _sbss;
+
+int main(void);
+void reset_handler(void); 
+void default_handler(void);

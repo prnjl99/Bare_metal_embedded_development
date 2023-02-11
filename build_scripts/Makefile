@@ -2,10 +2,12 @@
 
 ifeq ($(CI),true)
     CC:=gcc
+	CFLAGS=-Wno-pointer-to-int-cast -DCI_ENABLED
 else
     CC:=arm-none-eabi-gcc
     LD:=arm-none-eabi-ld
     OBJCOPY:=arm-none-eabi-objcopy
+    GDB:=arm-none-eabi-gdb
     CFLAGS=--specs=nosys.specs
 endif
 
@@ -14,7 +16,11 @@ APPDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)
 OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)/generated_files
 
 CFLAGS+=-Wall -Wextra -Werror
-LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld -nostdlib
+ifneq ($(CI),true)
+	CFLAGS+=-g -mlittle-endian -mthumb -mcpu=cortex-m4
+	CFLAGS+=-mfloat-abi=hard -mfpu=fpv4-sp-d16
+endif
+LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld
 
 INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp
 SRCS=$(wildcard $(ROOT_FOLDER)/bsp/*.c)
@@ -37,8 +43,12 @@ MV_FILES_BUILD:
 
 all:	MAINFUNC GENBIN MV_FILES_BUILD
 		$(info ######################################################)
-		$(info $(APP) build successfully)
+		$(info $(APP) built successfully)
 		$(info ######################################################)
+
+flash:	all
+		openocd -f stm.cfg -c "init; reset halt; stm32l4x mass_erase 0; exit"
+		openocd -f stm.cfg -c "program $(APPDIR)/$(APP).bin reset exit 0x08000000"
 
 MAINFUNC:$(OBJS) CREATE_DIRS
 
@@ -59,6 +69,9 @@ GENBIN:GENELF
 
 depend: $(SRCS)
 		makedepend $(INCLUDES) $^
+
+disass: all
+		$(GDB) $(APPDIR)/$(APP).elf -batch -ex 'disass /r $(FUNC)'
 
 clean:
 		rm -rf $(OBJS) $(APPDIR)

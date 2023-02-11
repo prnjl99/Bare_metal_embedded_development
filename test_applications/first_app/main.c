@@ -3,6 +3,6 @@
 
 int main(void)
 {
-	first_func();
-	while(1){};
+    blink_LED();
+    while(1){};
 }
