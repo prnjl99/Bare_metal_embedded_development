@@ -20,7 +20,7 @@ ifneq ($(CI),true)
 	CFLAGS+=-g -mlittle-endian -mthumb -mcpu=cortex-m4
 	CFLAGS+=-mfloat-abi=hard -mfpu=fpv4-sp-d16
 endif
-LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld
+LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld -Map=$(OBJDIR)/$(APP).map
 
 INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp
 SRCS=$(wildcard $(ROOT_FOLDER)/bsp/*.c)
@@ -49,6 +49,16 @@ all:	MAINFUNC GENBIN MV_FILES_BUILD
 flash:	all
 		openocd -f stm.cfg -c "init; reset halt; stm32l4x mass_erase 0; exit"
 		openocd -f stm.cfg -c "program $(APPDIR)/$(APP).bin reset exit 0x08000000"
+
+# For debugging with GDB:
+# 		openocd -f stm.cfg -c "init; reset init"
+#  		Then start GDB in other shell and execute following commands:
+#		target remote :3333
+#		monitor reset init
+#		file <PATH TO .elf FILE>
+#		load
+# Can be programmed via st-flash:
+#	 st-flash --reset write $(APPDIR)/$(APP).bin 0x8000000
 
 MAINFUNC:$(OBJS) CREATE_DIRS
 
