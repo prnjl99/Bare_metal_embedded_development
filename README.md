@@ -10,6 +10,7 @@ Commands:
 _Note:_
 - _`APP` can be selected from test_applications directory. e.g. first_app_
 - _`FUNCTION` can be any function in the project. e.g. main_
+- _GDB debug support: check comments in Makefile._
 
 Documents related to STM32L476RG:
 
