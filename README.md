@@ -3,6 +3,7 @@ Currently developing bare metal driver, startup-code, linker-script, build infra
 
 Commands:
 - **Clean project**:./build_scripts/build.sh clean
+- **Erase project**:./build_scripts/build.sh erase
 - **Build project**:./build_scripts/build.sh build `APP`
 - **Flash project**:./build_scripts/build.sh flash `APP`
 - **Dissassemble** :./build_scripts/build.sh disass `APP` `FUNCTION`
