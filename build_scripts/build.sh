@@ -14,6 +14,8 @@ fi
 
 if [[ $1 == build ]];then
     make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI all
+elif [[ $1 == erase ]];then
+    make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI erase
 elif [[ $1 == flash ]];then
     make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI flash
 elif [[ $1 == disass ]];then
