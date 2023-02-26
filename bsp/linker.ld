@@ -33,5 +33,5 @@ SECTIONS
     *(.bss SORT(.bss.*) COMMON)
     _ebss = .;
     __bss_end__ = _ebss;
-  } >RAM
+  } >RAM2
 }
