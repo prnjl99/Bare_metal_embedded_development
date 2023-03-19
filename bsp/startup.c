@@ -1,15 +1,29 @@
-#include "startup.h"
 #include <stdint.h>
+#include "startup.h"
 
 #ifdef CI_ENABLED
-    uint32_t vector[] __attribute__ ((section (".isr_vector"))) = {
+    void (*vector[])(void) __attribute__ ((section (".isr_vector"))) = {
         STACK_START,
         0x0UL,
     };
 #else
-    uint32_t vector[] __attribute__ ((section (".isr_vector"))) = {
-        STACK_START,
-        (uint32_t)(&reset_handler),
+    void (*vector[])(void) __attribute__ ((section (".isr_vector"))) = {
+        (void (*)(void))STACK_START,
+        (&reset_handler),
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		(&SysTick_Handler)
     };
 #endif
 
