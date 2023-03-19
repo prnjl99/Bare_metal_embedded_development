@@ -3,8 +3,8 @@
 
 #ifdef CI_ENABLED
     void (*vector[])(void) __attribute__ ((section (".isr_vector"))) = {
-        STACK_START,
-        0x0UL,
+        (void (*)(void))STACK_START,
+        (void (*)(void))0x0UL,
     };
 #else
     void (*vector[])(void) __attribute__ ((section (".isr_vector"))) = {
