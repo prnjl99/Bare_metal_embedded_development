@@ -1,4 +1,4 @@
-#include "first.h"
+#include "gpio.h"
 
 void blink_LED(void)
 {
@@ -23,8 +23,3 @@ void blink_LED(void)
     for(uint32_t test_pra=0UL;test_pra<50000UL;test_pra++){};
   }
 }
-
-void _close(void) {}
-void _lseek(void) {} 
-void _read(void)  {}
-void _write(void) {}
