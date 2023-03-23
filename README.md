@@ -6,6 +6,12 @@ Commands:
 - **Erase project**:./build_scripts/build.sh erase
 - **Build project**:./build_scripts/build.sh build `APP`
 - **Flash project**:./build_scripts/build.sh flash `APP`
+- **Debug project**:./build_scripts/build.sh debug `APP`
+<pre>
+    Keep curerent terminal open and start separate terminal.
+    Run arm-none-eabi-gdb
+    execute 'source -v build_scripts\gdb_cmd'
+</pre>
 - **Dissassemble** :./build_scripts/build.sh disass `APP` `FUNCTION`
 
 _Note:_
