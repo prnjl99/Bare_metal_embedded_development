@@ -9,7 +9,7 @@
 #else
     void (*vector[])(void) __attribute__ ((section (".isr_vector"))) = {
         (void (*)(void))STACK_START,
-        (&reset_handler),
+        (void (*)(void))(&reset_handler),
 		0,
 		0,
 		0,
@@ -23,7 +23,7 @@
 		0,
 		0,
 		0,
-		(&SysTick_Handler)
+		(void (*)(void))(&SysTick_Handler)
     };
 #endif
 

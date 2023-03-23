@@ -1,0 +1,4 @@
+target remote :3333
+monitor reset init
+file <path of repo>/test_applications/build/first_app/first_app.elf
+load

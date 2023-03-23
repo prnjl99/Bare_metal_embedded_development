@@ -50,6 +50,9 @@ flash:	all
 		openocd -f stm.cfg -c "init; reset halt; stm32l4x mass_erase 0; exit"
 		openocd -f stm.cfg -c "program $(APPDIR)/$(APP).bin reset exit 0x08000000"
 
+debug:	all
+		openocd -f stm.cfg -c "init; reset init"
+
 erase:
 		openocd -f stm.cfg -c "init; reset halt; stm32l4x mass_erase 0; exit"
 
