@@ -19,7 +19,14 @@ elif [[ $1 == erase ]];then
 elif [[ $1 == flash ]];then
     make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI flash
 elif [[ $1 == debug ]];then
-    make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI debug
+    make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI all
+    openocd -s scripts -f $ROOT_FOLDER/build_scripts/stm.cfg -c "init; reset init" &
+    sleep 1
+    arm-none-eabi-gdb -ex "target remote :3333" \
+    -ex "monitor reset init" \
+    -ex "set confirm off" \
+    -ex "file $ROOT_FOLDER/test_applications/build/first_app/first_app.elf" \
+    -ex "load"
 elif [[ $1 == disass ]];then
     make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI FUNC=$3 disass
 elif [[ $1 == clean ]];then
