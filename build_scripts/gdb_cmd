@@ -1,4 +1,38 @@
-target remote :3333
-monitor reset init
-file <path of repo>/test_applications/build/first_app/first_app.elf
-load
+set logging on
+set logging file op.txt
+help
+break 1
+c
+break main
+info breakpoints
+delete 1
+info registers
+i r
+info frame
+info variables
+info locals
+info args
+bt
+backtrace
+frame 0
+break reset_handler if $0==0
+info breakpoints
+condition 2 $0 == 0
+info breakpoints
+where
+print timer
+print &timer
+print sizeof(timer)
+print sizeof(&timer)
+print/x timer
+x/12xb &timer
+list
+list main
+list 2
+list 2,5
+watch timer
+rwatch timer
+awatch timer
+disassemble main
+command 2
+c
