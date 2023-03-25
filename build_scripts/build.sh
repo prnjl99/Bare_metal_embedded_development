@@ -27,6 +27,7 @@ elif [[ $1 == debug ]];then
     -ex "set confirm off" \
     -ex "file $ROOT_FOLDER/test_applications/build/first_app/first_app.elf" \
     -ex "load"
+#    -ex "source -v $ROOT_FOLDER/build_scripts/gdb_cmd"
 elif [[ $1 == disass ]];then
     make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI FUNC=$3 disass
 elif [[ $1 == clean ]];then
