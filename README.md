@@ -12,6 +12,7 @@ Commands:
 _Note:_
 - _`APP` can be selected from test_applications directory. e.g. first_app_
 - _`FUNCTION` can be any function in the project. e.g. main_
+- _Instead of using drivers and BSP developed from scratch in this repo, if you want to use drivers and BSP provided by ST, add `stm_build=1` in command. e.g. `stm_build=1 <PATH OF PROJECT'S ROOT FOLDER>`/build_scripts/build.sh build `APP`_
 
 Documents related to STM32L476RG:
 
