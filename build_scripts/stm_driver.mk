@@ -9,6 +9,7 @@ else
     AR:=arm-none-eabi-ar
     OBJCOPY:=arm-none-eabi-objcopy
     GDB:=arm-none-eabi-gdb
+    READELF:=arm-none-eabi-readelf
 endif
 
 APP?=uart
@@ -92,6 +93,7 @@ GENELF:
 		$(info linking object files)
 		$(info ######################################################)
 		$(CC) $(LFLAGS) $(OBJS) -o $(APPDIR)/$(APP).elf
+		$(READELF) -Sl $(APPDIR)/$(APP).elf > $(APPDIR)/$(APP).readelf
 
 GENBIN:GENELF
 		$(info ######################################################)
