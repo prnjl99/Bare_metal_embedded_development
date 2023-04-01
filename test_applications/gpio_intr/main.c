@@ -6,20 +6,18 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdio.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -41,7 +39,6 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-RTC_HandleTypeDef hrtc;
 
 /* USER CODE BEGIN PV */
 
@@ -49,8 +46,7 @@ RTC_HandleTypeDef hrtc;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-//static void MX_GPIO_Init(void);
-//static void MX_RTC_Init(void);
+static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -73,46 +69,23 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  //HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
   /* Configure the system clock */
-  //SystemClock_Config();
+  SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  //MX_GPIO_Init();
-  //MX_RTC_Init();
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  /* Initialize Virtual COM Port */
-  BSP_COM_Init(COM1);
 
-  //status = VD6283A1_LIGHT_SENSOR_Init(LIGHT_SENSOR_INSTANCE_0);
-  //static unsigned short pra_pin_state = 0;
-
-  for(int pra=0;;pra++)
-  {
-	//pra_pin_state = !pra_pin_state;
-	//HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, pra_pin_state);
-	/*static int local_pra=0x55;
-    printf("Modified Hello %d\n",pra);
-	HAL_UART_Transmit(((UART_HandleTypeDef *)(0x2000008c)), (uint8_t *)&local_pra, 1, COM_POLL_TIMEOUT);
-	local_pra++;
-	HAL_UART_Transmit(((UART_HandleTypeDef *)(0x2000008c)), (uint8_t *)&local_pra, 1, COM_POLL_TIMEOUT);
-	local_pra++;
-	HAL_UART_Transmit(((UART_HandleTypeDef *)(0x2000008c)), (uint8_t *)&local_pra, 1, COM_POLL_TIMEOUT);
-	local_pra++;
-	HAL_UART_Transmit(((UART_HandleTypeDef *)(0x2000008c)), (uint8_t *)&local_pra, 1, COM_POLL_TIMEOUT);*/
-    printf("22500104 Hello %d\n",pra);
-//    for(int delay_pra=0;delay_pra<300000;delay_pra++){};
-    //while(1);
-  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -126,6 +99,14 @@ int main(void)
   /* USER CODE END 3 */
 }
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if(GPIO_Pin == GPIO_PIN_13) // If The INT Source Is EXTI Line9 (A9 Pin)
+    {
+		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); // Toggle The Output (LED) Pin
+    }
+}
+
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -134,19 +115,25 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+
+  /** Configure the main internal regulator output voltage
+  */
+  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
+  {
+    Error_Handler();
+  }
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
+  RCC_OscInitStruct.MSIState = RCC_MSI_ON;
+  RCC_OscInitStruct.MSICalibrationValue = 0;
+  RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_6;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
   RCC_OscInitStruct.PLL.PLLM = 1;
-  RCC_OscInitStruct.PLL.PLLN = 10;
+  RCC_OscInitStruct.PLL.PLLN = 36;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
@@ -154,6 +141,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -167,28 +155,43 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_USART2
-                              |RCC_PERIPHCLK_I2C1;
-  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
-  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
-  PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure the main internal regulator output voltage
-  */
-  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
-  {
-    Error_Handler();
-  }
 }
 
 /**
-  * @brief RTC Initialization Function
+  * @brief GPIO Initialization Function
   * @param None
   * @retval None
   */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+}
 
 /* USER CODE BEGIN 4 */
 
@@ -225,5 +228,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
