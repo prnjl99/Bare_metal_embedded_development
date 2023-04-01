@@ -1,6 +1,6 @@
 #include "gpio.h"
 
-void blink_LED(void)
+void toggle_LED(void)
 {
     // Enable the clock to GPIO port A
     RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
