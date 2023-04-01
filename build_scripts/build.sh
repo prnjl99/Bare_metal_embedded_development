@@ -4,15 +4,14 @@
 # Fetch ROOT directory path
 ROOT_FOLDER="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-if [[ ! -v stm_build ]];then
-    make_file="$ROOT_FOLDER/build_scripts/scratch.mk"
+if [[ -v stm_build ]];then
+    stm_build=1
 else
-    make_file="$ROOT_FOLDER/build_scripts/stm_driver.mk"
+    stm_build=0
 fi
 
 case `uname` in
     *CYGWIN*|*MINGW*|*MSYS*) ROOT_FOLDER=`cygpath -m "$ROOT_FOLDER"`;;
-    *CYGWIN*|*MINGW*|*MSYS*) make_file=`cygpath -m "$make_file"`;;
 esac
 
 if [[ ! -v CI ]];then
@@ -20,14 +19,14 @@ if [[ ! -v CI ]];then
 fi
 
 if [[ $1 == build ]];then
-    make -f $make_file --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI all
+    make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI stm_build=$stm_build all
 elif [[ $1 == erase ]];then
-    make -f $make_file --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI erase
+    make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI stm_build=$stm_build erase
 elif [[ $1 == flash ]];then
-    make -f $make_file --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI flash
+    make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI stm_build=$stm_build flash
 elif [[ $1 == debug ]];then
 	if [[ ! -f $ROOT_FOLDER/test_applications/build/$2/$2.elf ]]; then
-		make -f $make_file --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI all
+		make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI stm_build=$stm_build all
 	fi
     openocd -s scripts -f $ROOT_FOLDER/build_scripts/stm.cfg -c "init; reset init" &
     sleep 1
@@ -38,7 +37,7 @@ elif [[ $1 == debug ]];then
     -ex "load"
 #    -ex "source -v $ROOT_FOLDER/build_scripts/gdb_cmd"
 elif [[ $1 == disass ]];then
-    make -f $make_file --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI FUNC=$3 disass
+    make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI FUNC=$3 stm_build=$stm_build disass
 elif [[ $1 == clean ]];then
     find . -name '*.o' -exec rm -r {} \;
     find . -name '*.d' -exec rm -r {} \;
