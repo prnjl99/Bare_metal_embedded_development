@@ -23,7 +23,7 @@ typedef struct
   volatile uint32_t BRR;
 } GPIO_TypeDef;
 
-void blink_LED(void);
+void toggle_LED(void);
 void invert_LED(void);
 
 #endif /* GPIO_H */
