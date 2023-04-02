@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "systick.h"
+#include "gpio.h"
 
 #define STACK_START 0x20018000U
 

@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include "main.h"
+
 
 #ifndef COMMON_H
 #define COMMON_H
