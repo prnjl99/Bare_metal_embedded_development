@@ -16,10 +16,10 @@ endif
 
 LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld -Map=$(OBJDIR)/$(APP).map
 
-INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp
+INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp -I$(ROOT_FOLDER)/test_applications/scratch/$(APP)
 
 SRCS=$(wildcard $(ROOT_FOLDER)/bsp/*.c)
 SRCS+=$(wildcard $(ROOT_FOLDER)/driver/sources/*.c)
-SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/$(APP)/*.c)
+SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/scratch/$(APP)/*.c)
 
 LDFILES=$(wildcard $(ROOT_FOLDER)/bsp/*.ld)

@@ -18,3 +18,8 @@ int main(void)
         }
     }
 }
+
+void User_intr_handler(void)
+{
+    while(1){};
+}

@@ -25,5 +25,6 @@ typedef struct
 
 void toggle_LED(void);
 void invert_LED(void);
+void Pin10_15handler(void);
 
 #endif /* GPIO_H */
