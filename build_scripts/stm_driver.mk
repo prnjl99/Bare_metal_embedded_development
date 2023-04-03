@@ -20,12 +20,12 @@ LFLAGS+=-Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-a
 INCLUDES=-I$(ROOT_FOLDER)/stm_files/driver/BSP/STM32L4xx_Nucleo -I$(ROOT_FOLDER)/stm_files/driver/CMSIS/Device/ST/STM32L4xx/Include
 INCLUDES+=-I$(ROOT_FOLDER)/stm_files/driver/CMSIS/Include -I$(ROOT_FOLDER)/stm_files/driver/STM32L4xx_HAL_Driver/Inc
 INCLUDES+=-I$(ROOT_FOLDER)/stm_files/driver/STM32L4xx_HAL_Driver/Inc/Legacy -I$(ROOT_FOLDER)/stm_files/driver
-INCLUDES+=-I$(ROOT_FOLDER)/test_applications/$(APP)
+INCLUDES+=-I$(ROOT_FOLDER)/test_applications/using_stm_drivers/$(APP)
 
 SRCS=$(wildcard $(ROOT_FOLDER)/stm_files/driver/BSP/STM32L4xx_Nucleo/*.c)
 SRCS+=$(wildcard $(ROOT_FOLDER)/stm_files/driver/STM32L4xx_HAL_Driver/Src/*.c)
 SRCS+=$(wildcard $(ROOT_FOLDER)/stm_files/driver/*.c)
-SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/$(APP)/*.c)
+SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/using_stm_drivers/$(APP)/*.c)
 
 ASSM+=$(wildcard $(ROOT_FOLDER)/stm_files/bsp/*.s)
 
