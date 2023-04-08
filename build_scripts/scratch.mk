@@ -12,9 +12,11 @@ CFLAGS+=-Wall -Wextra -Werror
 ifneq ($(CI),true)
     CFLAGS+=-g -mlittle-endian -mthumb -mcpu=cortex-m4
     CFLAGS+=-mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=nosys.specs
+    # Generate separate sections for each data functions
+    CFLAGS+=-fdata-sections -ffunction-sections
 endif
 
-LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld -Map=$(OBJDIR)/$(APP).map
+LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld -Map=$(OBJDIR)/$(APP).map --gc-sections
 
 INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp -I$(ROOT_FOLDER)/test_applications/scratch/$(APP)
 
