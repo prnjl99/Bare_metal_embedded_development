@@ -1,7 +1,5 @@
 #include "gpio.h"
 
-static int pra_pin_state = 1;
-
 void toggle_LED(void)
 {
     // Enable the clock to GPIO port A
@@ -9,6 +7,8 @@ void toggle_LED(void)
     // Initialize pin A_5
     GPIOA->MODER &= ~(3U << (5 * 2));
     GPIOA->MODER |= (1 & 3) << (5 * 2);
+
+    static int pra_pin_state = 0;
 
     while(1)
     {

@@ -12,9 +12,15 @@ MEMORY
 SECTIONS
 {
   .isr_vector  : { KEEP(*(.isr_vector)) } > FLASH
-  .text :
+ 
+ .text :
   {
      *(.text*)
+	 *(.glue_7)
+	 *(.glue_7t)
+	 *(.eh_frame)
+	 KEEP (*(.init))
+	 KEEP (*(.fini))
       _etext = .;
   } > FLASH
 
@@ -36,4 +42,45 @@ SECTIONS
     _ebss = .;
     __bss_end__ = _ebss;
   } >RAM2
+
+  .rodata : ALIGN(4)
+  {
+	*(.rodata)
+	*(.rodata*)
+	KEEP(*(.rodata))
+	KEEP(*(.rodata*))
+  } >FLASH
+  
+  .ARM.extab :
+  {
+	*(.ARM.extab* .gnu.linkonce.armextab.*)
+  } >FLASH
+
+  .ARM :
+  {
+	*(.ARM.exidx*)
+  } >FLASH
+
+  .preinit_array :
+  {
+	PROVIDE_HIDDEN (__preinit_array_start = .);
+	KEEP (*(.preinit_array*))
+	PROVIDE_HIDDEN (__preinit_array_end = .);
+  } >FLASH
+
+  .init_array :
+  {
+	PROVIDE_HIDDEN (__init_array_start = .);
+	KEEP (*(SORT(.init_array.*)))
+	KEEP (*(.init_array*))
+	PROVIDE_HIDDEN (__init_array_end = .);
+  } >FLASH
+
+  .fini_array :
+  {
+	PROVIDE_HIDDEN (__fini_array_start = .);
+	KEEP (*(SORT(.fini_array.*)))
+	KEEP (*(.fini_array*))
+	PROVIDE_HIDDEN (__fini_array_end = .);
+  } >FLASH
 }
