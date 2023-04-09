@@ -16,7 +16,7 @@ ifneq ($(CI),true)
     CFLAGS+=-fdata-sections -ffunction-sections
 endif
 
-LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld -Map=$(OBJDIR)/$(APP).map --gc-sections
+LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld -Map=$(OBJDIR)/$(APP).map
 
 INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp -I$(ROOT_FOLDER)/test_applications/scratch/$(APP)
 

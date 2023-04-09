@@ -4,6 +4,7 @@
 #define STACK_START 0x20018000U
 
 extern uint32_t _etext;
+extern uint32_t _sldata;
 extern uint32_t _sdata;
 extern uint32_t _edata;
 extern uint32_t _ebss;
