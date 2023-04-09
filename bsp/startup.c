@@ -35,14 +35,14 @@ void reset_handler(void)
 {
     uint32_t size = (uint32_t)&_edata - (uint32_t)&_sdata;
     uint32_t *pDst = (uint32_t*)&_sdata;
-    uint32_t *pSrc = (uint32_t*)&_etext;
+    uint32_t *pSrc = (uint32_t*)&_sldata;
 
     for(uint32_t i =0 ; i<size; i++)
     {
         *pDst++ = *pSrc++;
     }
     
-    size = &_ebss - &_sbss;
+    size = (uint32_t)&_ebss - (uint32_t)&_sbss;
     pDst = (uint32_t*)&_sbss;
 
     for(uint32_t i =0 ; i<size; i++)

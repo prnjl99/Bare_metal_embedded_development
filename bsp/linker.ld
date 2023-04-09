@@ -18,6 +18,8 @@ SECTIONS
       _etext = .;
   } > FLASH
 
+  _sldata = LOADADDR(.data);
+
   .data : 
   {
     _sdata = .;
@@ -26,7 +28,7 @@ SECTIONS
     _edata = .;
   } >RAM AT> FLASH
 
-  .bss :
+  .bss (NOLOAD):
   {
     _sbss = .;
     __bss_start__ = _sbss;
