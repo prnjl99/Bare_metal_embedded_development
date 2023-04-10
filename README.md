@@ -1,4 +1,4 @@
-# ARM Cortex-M4 based driver development
+# ARM Cortex-M4 based driver development using STM32L476RG
 Currently developing bare metal driver, startup-code, linker-script, build infrastructure etc. for STM32L476RG without using any IDE/development environment.
 
 Commands:
