@@ -9,7 +9,7 @@
 int main(void)
 {
     systick_init(MAIN_FREQ/DIV_FACTOR);
-    uint32_t timer=0UL, period = M_THOUSAND;
+    uint32_t timer=0UL, period = 50UL;
     while(1UL)
     {
         if (timer_expired(&timer, period, s_ticks))
