@@ -7,6 +7,8 @@
         (void (*)(void))0x0UL,
     };
 #else
+    void reset_handler(void) __attribute__ ((weak, alias("default_reset_handler")));
+    void SysTick_Handler(void) __attribute__ ((weak, alias("default_SysTick_Handler")));
     void (*vector[])(void) __attribute__ ((section (".isr_vector"))) = {
         (void (*)(void))STACK_START,
         (void (*)(void))(&reset_handler),
@@ -27,11 +29,13 @@
     };
 #endif
 
+volatile uint32_t s_ticks;
+
 void default_handler(void){
     while(1){};
 }
 
-void reset_handler(void)
+void default_reset_handler(void)
 {
     uint32_t size = (uint32_t)&_edata - (uint32_t)&_sdata;
     uint32_t *pDst = (uint32_t*)&_sdata;
@@ -51,4 +55,9 @@ void reset_handler(void)
     }
 
     main();
+}
+
+void default_SysTick_Handler(void)
+{
+    s_ticks++;
 }

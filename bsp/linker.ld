@@ -34,6 +34,19 @@ SECTIONS
     _edata = .;
   } >RAM AT> FLASH
 
+  _slrelocate_intr = LOADADDR(.relocate_intr);
+
+  .relocate_intr : 
+  {
+    _srelocate_intr = .;
+    *(.ramvtor2)
+	*(.ramfunc2)
+    KEEP(*(.ramvtor2 .ramfunc2))
+    _erelocate_intr = .;
+  } >RAM2 AT> FLASH
+  
+  _size_relocate_intr = _erelocate_intr - _srelocate_intr;
+
   .bss (NOLOAD):
   {
     _sbss = .;
@@ -41,7 +54,7 @@ SECTIONS
     *(.bss SORT(.bss.*) COMMON)
     _ebss = .;
     __bss_end__ = _ebss;
-  } >RAM2
+  } >RAM
 
   .rodata : ALIGN(4)
   {

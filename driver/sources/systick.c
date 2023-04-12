@@ -1,13 +1,6 @@
 #include "common.h"
 #include "systick.h"
 
-volatile uint32_t s_ticks;
-
-void SysTick_Handler(void)
-{
-    s_ticks++;
-}
-
 // t: expiration time, prd: period, now: current time. Return true if expired
 bool timer_expired(uint32_t *timer, uint32_t prd, uint32_t intr_ticks)
 {

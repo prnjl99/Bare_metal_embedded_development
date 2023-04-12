@@ -17,7 +17,6 @@ typedef struct
 
 extern volatile uint32_t s_ticks;
 
-void SysTick_Handler(void);
 bool timer_expired(uint32_t *t, uint32_t prd, uint32_t now);
 
 static inline void systick_init(uint32_t ticks)
