@@ -28,7 +28,7 @@ elif [[ $1 == debug ]];then
 	if [[ ! -f $ROOT_FOLDER/test_applications/build/$2/$2.elf ]]; then
 		make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI stm_build=$stm_build all
 	fi
-    openocd -s scripts -f $ROOT_FOLDER/build_scripts/stm.cfg -c "init; reset init" &
+    openocd -s scripts -f $ROOT_FOLDER/build_scripts/stm.cfg -c "init; reset init; monitor arm semihosting enable" &
     sleep 1
     arm-none-eabi-gdb -ex "target remote :3333" \
     -ex "monitor reset init" \

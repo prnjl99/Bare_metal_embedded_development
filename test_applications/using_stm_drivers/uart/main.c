@@ -64,6 +64,9 @@ void SystemClock_Config(void);
   * @brief  The application entry point.
   * @retval int
   */
+  
+extern void initialise_monitor_handles(void);
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -95,6 +98,8 @@ int main(void)
 
   //status = VD6283A1_LIGHT_SENSOR_Init(LIGHT_SENSOR_INSTANCE_0);
   //static unsigned short pra_pin_state = 0;
+
+  initialise_monitor_handles();
 
   for(int pra=0;;pra++)
   {

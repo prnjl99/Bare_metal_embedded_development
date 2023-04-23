@@ -16,6 +16,7 @@ endif
 
 LFLAGS=-T $(ROOT_FOLDER)/stm_files/bsp/STM32L476RGTX_FLASH.ld -mcpu=cortex-m4 --specs=nosys.specs -Wl,-Map="$(APPDIR)/$(APP).map"
 LFLAGS+=-static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+LFLAGS+=-specs=rdimon.specs -lc -lrdimon
 # Enable this to discard sections using garbage collector
 #LFLAGS+=-Wl,--gc-sections
 
