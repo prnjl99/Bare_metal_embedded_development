@@ -25,7 +25,11 @@ fi
 get_dep()
 {
 	if [[ ! -d $ROOT_FOLDER/stm_files ]]; then
-		unzip $ROOT_FOLDER/stm_files.zip
+		unzip $ROOT_FOLDER/stm_files.zip -d $ROOT_FOLDER/stm_files
+		if [[ -d $ROOT_FOLDER/stm_files/C: ]]; then
+			mv $ROOT_FOLDER/stm_files/"$(dirname $ROOT_FOLDER)"/STM32-Bare-metal-embedded-development/stm_files/* $ROOT_FOLDER/stm_files/
+			rm -rf $ROOT_FOLDER/stm_files/C:
+		fi
 		rm -rf $ROOT_FOLDER/C:
 	fi
 }
