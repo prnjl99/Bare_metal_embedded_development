@@ -60,6 +60,16 @@ SECTIONS
   _heap_start = _end_static;
   _heap_size = 0x100;
   _heap_limit = _end_static + _heap_size;
+  _min_stack_size = 0x400;
+
+  /* Link time check to ensure RAM is not overflown by stack and heap */
+  .stack_heap_overflow_check :
+  {
+      . = ALIGN(4);
+      . = . + _heap_size;
+      . = . + _min_stack_size;
+      . = ALIGN(4);
+  } > RAM
 
   .rodata : ALIGN(4)
   {
