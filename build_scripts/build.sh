@@ -10,6 +10,12 @@ else
     stm_build=0
 fi
 
+if [[ -v tiva ]];then
+    tiva_build=1
+else
+    tiva_build=0
+fi
+
 case `uname` in
     *CYGWIN*|*MINGW*|*MSYS*) ROOT_FOLDER=`cygpath -m "$ROOT_FOLDER"`;;
 esac
@@ -47,7 +53,11 @@ elif [[ $1 == debug ]];then
 	if [[ ! -f $ROOT_FOLDER/test_applications/build/$2/$2.elf ]]; then
 		make --no-print-directory -C $ROOT_FOLDER/build_scripts APP=$2 ROOT_FOLDER=$ROOT_FOLDER CI=$CI stm_build=$stm_build all
 	fi
-    openocd -s scripts -f $ROOT_FOLDER/build_scripts/stm.cfg -c "init; reset init" &
+	if [[ $tiva_build == 1 ]]; then
+		openocd -s scripts -f $ROOT_FOLDER/build_scripts/tiva_programming_support/ek-tm4c123gxl.cfg -c "init; reset init" &
+	else
+		openocd -s scripts -f $ROOT_FOLDER/build_scripts/stm_programming_support/stm.cfg -c "init; reset init" &
+	fi
     sleep 1
     arm-none-eabi-gdb -ex "target remote :3333" \
     -ex "monitor reset init" \
