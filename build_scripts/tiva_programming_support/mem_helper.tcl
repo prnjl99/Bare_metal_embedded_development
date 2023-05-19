@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 # Helper for common memory read/modify/write procedures
 
 # mrw: "memory read word", returns value of $reg
@@ -34,5 +36,3 @@ proc mmw {reg setbits clearbits} {
 
 add_usage_text mmw "address setbits clearbits"
 add_help_text mmw "Modify word in memory. new_val = (old_val & ~clearbits) | setbits;"
-
-source [find build_scripts/mon_cmd_extension.cfg]
