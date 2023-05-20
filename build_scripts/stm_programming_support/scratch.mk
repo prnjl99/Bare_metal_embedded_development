@@ -4,8 +4,8 @@ ifneq ($(CI),true)
 endif
 
 APP?=first_app
-APPDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)
-OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)/generated_files
+APPDIR=$(ROOT_FOLDER)/test_applications/build/$(build_dir)/$(APP)
+OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(build_dir)/$(APP)/generated_files
 
 CFLAGS+=-Wall -Wextra -Werror
 
@@ -16,7 +16,7 @@ ifneq ($(CI),true)
     CFLAGS+=-fdata-sections -ffunction-sections
 endif
 
-LFLAGS=-T $(ROOT_FOLDER)/bsp/linker.ld
+LFLAGS=-T $(ROOT_FOLDER)/bsp/stm/linker.ld
 ifneq ($(CI),true)
     LFLAGS+=-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb --specs=nano.specs --specs=nosys.specs
     LFLAGS+=-static -Wl,--start-group -lc -lm -Wl,--end-group -Wl,-Map=$(APPDIR)/$(APP).map 
@@ -24,10 +24,10 @@ ifneq ($(CI),true)
     #LFLAGS+=--gc-sections
 endif
 
-INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp -I$(ROOT_FOLDER)/test_applications/scratch/$(APP)
+INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp/stm -I$(ROOT_FOLDER)/test_applications/scratch/stm/$(APP)
 
-SRCS=$(wildcard $(ROOT_FOLDER)/bsp/*.c)
+SRCS=$(wildcard $(ROOT_FOLDER)/bsp/stm/*.c)
 SRCS+=$(wildcard $(ROOT_FOLDER)/driver/sources/*.c)
-SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/scratch/$(APP)/*.c)
+SRCS+=$(wildcard $(ROOT_FOLDER)/test_applications/scratch/stm/$(APP)/*.c)
 
-LDFILES=$(wildcard $(ROOT_FOLDER)/bsp/*.ld)
+LDFILES=$(wildcard $(ROOT_FOLDER)/bsp/stm/*.ld)

@@ -4,8 +4,8 @@ ifneq ($(CI),true)
 endif
 
 APP?=uart
-APPDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)
-OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(APP)/generated_files
+APPDIR=$(ROOT_FOLDER)/test_applications/build/$(build_dir)/$(APP)
+OBJDIR=$(ROOT_FOLDER)/test_applications/build/$(build_dir)/$(APP)/generated_files
 
 CFLAGS+=-Wall -Wextra -Werror -DSTM32L476xx -Wno-unused-parameter
 ifneq ($(CI),true)
