@@ -20,7 +20,7 @@ jobs:
 #       sudo apt install build-essential
 
     - name: build_test_project
-      run: bash ./build_scripts/build.sh build toggle_led
+      run: bash stm=1 ./build_scripts/build.sh build toggle_led
 
 #    - name: Run check
 #      run: make check
