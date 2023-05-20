@@ -35,6 +35,10 @@ elif [[ -v stm ]];then
 		echo "Building using STM library"
 		scratch=0
 	fi
+elif [[ -v CI ]];then
+	tiva_build=0
+	build_dir="stm"
+	scratch=1
 else
 	echo "ERROR: Provide target: tiva=1 or stm=1 in argument"
 	exit 1;
