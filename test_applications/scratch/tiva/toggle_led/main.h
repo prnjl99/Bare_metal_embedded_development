@@ -11,6 +11,8 @@
 #define HWREG(x)                                                              \
         (*((volatile uint32_t *)(x)))
 
+#define GPIO_PIN_1              0x00000002
+#define GPIO_PIN_2              0x00000004  // GPIO pin 2
 #define GPIO_PIN_3              0x00000008
 #define GPIO_PORTF_BASE         0x40025000
 #define GPIO_PIN_TYPE_ANALOG    0x00000000
