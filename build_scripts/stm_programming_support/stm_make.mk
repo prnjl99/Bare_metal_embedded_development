@@ -5,6 +5,7 @@ else
     CC:=arm-none-eabi-gcc
     AS:=arm-none-eabi-as
     AR:=arm-none-eabi-ar
+    DISASS:=arm-none-eabi-objdump
     OBJCOPY:=arm-none-eabi-objcopy
     GDB:=arm-none-eabi-gdb
     READELF:=arm-none-eabi-readelf
@@ -31,7 +32,7 @@ MV_FILES_BUILD:
 
 .PHONY: depend clean all
 
-all:	MAINFUNC GENBIN MV_FILES_BUILD
+all:	MAINFUNC GENDISASS MV_FILES_BUILD
 		$(info ######################################################)
 		$(info $(APP) built successfully)
 		$(info ######################################################)
@@ -72,11 +73,18 @@ GENELF:
 		$(LD) $(LFLAGS) $(OBJS) -o $(APPDIR)/$(APP).elf
 		$(READELF) -Sl $(APPDIR)/$(APP).elf > $(APPDIR)/$(APP).readelf
 
-GENBIN:GENELF
+GENIM:GENELF
 		$(info ######################################################)
-		$(info generating bin file)
+		$(info generating bin and hex images)
 		$(info ######################################################)
 		$(OBJCOPY) -O binary $(APPDIR)/$(APP).elf $(APPDIR)/$(APP).bin
+		$(OBJCOPY) -O ihex $(APPDIR)/$(APP).elf $(APPDIR)/$(APP).hex
+
+GENDISASS:GENIM
+		$(info ######################################################)
+		$(info generating disassembly file)
+		$(info ######################################################)
+		$(DISASS) -D $(APPDIR)/$(APP).elf > $(APPDIR)/$(APP).s
 
 depend: $(SRCS)
 		makedepend $(INCLUDES) $^
