@@ -9,6 +9,8 @@ else
     OBJCOPY:=arm-none-eabi-objcopy
     GDB:=arm-none-eabi-gdb
     READELF:=arm-none-eabi-readelf
+	# nm also can be used to analyze object files and final executable file ( because both are in ELF format )
+	# Linux uses ELF format, whereas Windows uses COFF format
 endif
 
 ifeq ($(scratch),1)
@@ -32,7 +34,7 @@ MV_FILES_BUILD:
 
 .PHONY: depend clean all
 
-all:	MAINFUNC GENDISASS MV_FILES_BUILD
+all:	MAINFUNC GENDISASS GENDISASS_M MV_FILES_BUILD
 		$(info ######################################################)
 		$(info $(APP) built successfully)
 		$(info ######################################################)
@@ -85,6 +87,12 @@ GENDISASS:GENIM
 		$(info generating disassembly file)
 		$(info ######################################################)
 		$(DISASS) -D $(APPDIR)/$(APP).elf > $(APPDIR)/$(APP).s
+
+GENDISASS_M:
+		$(info ######################################################)
+		$(info generating disassembly of main.c file)
+		$(info ######################################################)
+		$(CC) -S $(CFLAGS) $(INCLUDES) $(ROOT_FOLDER)/test_applications/scratch/stm/$(APP)/main.c -o $(APPDIR)/main.s
 
 depend: $(SRCS)
 		makedepend $(INCLUDES) $^
