@@ -13,6 +13,11 @@ SECTIONS
 {
   .isr_vector  : { KEEP(*(.isr_vector)) } > FLASH
 
+  .veneers :
+  {
+     *(.veneer*)
+  } > RAM
+
  .text :
   {
      *(.text*)

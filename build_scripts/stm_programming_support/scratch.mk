@@ -1,6 +1,6 @@
 # Makefile to build target application from <ROOT>/test_applications
 ifneq ($(CI),true)
-    LD:=arm-none-eabi-gcc
+    LD:=arm-none-eabi-ld
 endif
 
 APP?=first_app
@@ -16,13 +16,11 @@ ifneq ($(CI),true)
     CFLAGS+=-fdata-sections -ffunction-sections
 endif
 
-LFLAGS=-T $(ROOT_FOLDER)/bsp/stm/linker.ld
-ifneq ($(CI),true)
-    LFLAGS+=-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb --specs=nano.specs --specs=nosys.specs
-    LFLAGS+=-static -Wl,--start-group -lc -lm -Wl,--end-group -Wl,-Map=$(APPDIR)/$(APP).map 
-    # Enable this to discard sections using garbage collector
-    #LFLAGS+=--gc-sections
-endif
+LFLAGS=-T $(ROOT_FOLDER)/bsp/stm/linker.ld -Map=$(APPDIR)/$(APP).map
+# Enable this to discard sections using garbage collector
+#LFLAGS+=--gc-sections
+
+-include $(ROOT_FOLDER)/test_applications/scratch/stm/$(APP)/config.mk
 
 INCLUDES=-I$(ROOT_FOLDER)/driver/headers -I$(ROOT_FOLDER)/bsp/stm -I$(ROOT_FOLDER)/test_applications/scratch/stm/$(APP)
 
