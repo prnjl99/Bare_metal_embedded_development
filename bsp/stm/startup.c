@@ -25,7 +25,14 @@
 		0,
 		0,
 		0,
-		(void (*)(void))(&SysTick_Handler)
+		(void (*)(void))(&SysTick_Handler),
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		(void (*)(void))EXTI0_IRQHandler
     };
 #endif
 
