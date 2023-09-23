@@ -58,7 +58,7 @@ SECTIONS
 
   _end_static = _ebss;
   _heap_start = _end_static;
-  _heap_size = 0x100;
+  _heap_size = 0x80;
   _heap_limit = _end_static + _heap_size;
   _min_stack_size = 0x400;
 

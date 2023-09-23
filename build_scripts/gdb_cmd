@@ -9,6 +9,7 @@ delete 1
 info registers
 i r
 info frame
+x/10x $sp
 info variables
 info locals
 info args
