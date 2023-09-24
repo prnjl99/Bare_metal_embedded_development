@@ -36,3 +36,5 @@ awatch timer
 disassemble main
 command 2
 c
+s - step over one C statement
+si - step over one assembly instruction
