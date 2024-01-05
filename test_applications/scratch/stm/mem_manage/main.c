@@ -5,6 +5,8 @@
 #include "common.h"
 #include "gpio.h"
 
+#define HEAP_ALIGNMENT 0x8
+
 void* malloc_int(size_t incr)
 {
   extern uint8_t _heap_start;
@@ -14,7 +16,19 @@ void* malloc_int(size_t incr)
 
   if(heap_end == 0)
   {
-      heap_end = &_heap_start;
+      uint32_t temp = (uint32_t)(&_heap_start);
+      /* Ensure heap starts on aligned boundary */
+      if((temp & (HEAP_ALIGNMENT-1)) != 0)
+      {
+          /* If not then add (HEAP_ALIGNMENT-1) and then and with ~HEAP_ALIGNMENT.
+          Adding is required because suppose, start is at 0x1001 and alignment is 4.
+          Then just ending will make temp less than where it should start. It will become 0x1000.
+          But adding will make it 0x1100. */
+          temp += (HEAP_ALIGNMENT-1);
+          temp &= ~((HEAP_ALIGNMENT-1));
+      }
+
+      heap_end = (uint8_t *)temp;
   }
 
   temp = heap_end + incr;
